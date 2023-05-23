@@ -14,7 +14,7 @@
 # uncomment your music players below.
 # 
 
-Control="MPD"
+Control="youtube"
 [ -n "$(pgrep spotify)" ] && Control="spotify"
 # [ -n "$(pgrep brave-bin)" ] && Control="brave-bin"
 # [ -n "$(pgrep rhythmbox)" ] && Control="rhythmbox"
@@ -37,49 +37,49 @@ mpddir=~/Music
 
 ########################## Title ##########################
 title() {
-title=$(playerctl --player=$Control metadata --format {{title}})
+title=$(playerctl  metadata --format {{title}})
 [ -z "$title" ] && title="Play Something"
 echo "$title"
 }
 
 ########################## Artist ##########################
 artist() {
-artist=$(playerctl --player=$Control metadata --format {{artist}})
+artist=$(playerctl metadata --format {{artist}})
 [ -z "$artist" ] && artist="Artist"
 echo "$artist"
 }
 
 ########################## Album ##########################
 album() {
-album=$(playerctl --player=$Control metadata --format {{album}})
+album=$(playerctl metadata --format {{album}})
 [ -z "$album" ] && album="Album"
 echo "$album"
 }
 
 ########################## Status ##########################
 status() {
-status=$(playerctl --player=$Control status)
+status=$(playerctl status)
 [ -z "$status" ] && status="Stopped"
 echo "$status"
 }
 
 ########################## Time ##########################
 ctime() {
-time=$(playerctl --player=$Control position --format "{{ duration(position) }}")
+time=$(playerctl position --format "{{ duration(position) }}")
 [ -z "$time" ] && time="0:00"
 echo "$time"
 }
 
 ########################## Length ##########################
 length() {
-length=$(playerctl --player=$Control metadata --format "{{ duration(mpris:length) }}")
+length=$(playerctl  metadata --format "{{ duration(mpris:length) }}")
 [ -z "$length" ] && length="0:00"
 echo "$length"
 }
 
 ########################## trackNumber ##########################
 playlist() {
-playlist=$(playerctl --player=$Control metadata xesam:trackNumber)
+playlist=$(playerctl  metadata xesam:trackNumber)
 [ -z "$playlist" ] && playlist="0"
 echo "$playlist"
 }
@@ -259,10 +259,10 @@ case $Control in
 	;;
 	*)
 	case $1 in 
-		--next)		playerctl --player=$Control next		;;
-		--previous)	playerctl --player=$Control previous	;;
-		--toggle)	playerctl --player=$Control play-pause	;;
-		--stop)		playerctl --player=$Control stop		;;
+		--next)		playerctl  next		;;
+		--previous)	playerctl  previous	;;
+		--toggle)	playerctl  play-pause	;;
+		--stop)		playerctl stop		;;
 		title)		title					;;
 		artist)		artist					;;
 		album)		album					;;

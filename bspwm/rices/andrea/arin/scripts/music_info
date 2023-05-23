@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-STATUS="$(mpc status)"
+STATUS="$(playerctl status)"
 
 get_status() {
-	if [[ $STATUS == *"[playing]"* ]]; then
+	if [[ $STATUS == "Playing" ]]; then
 		echo "images/icons/music/pause-button.png"
 	else
 		echo "images/icons/music/play-button.png"

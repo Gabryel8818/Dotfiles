@@ -3,126 +3,98 @@
 #  ╠╩╗╚═╗╠═╝║║║║║║  - https://github.com/gh0stzk/dotfiles
 #  ╚═╝╚═╝╩  ╚╩╝╩ ╩  - z0mbi3.zk@protonmail.com
 
+
 #  ┬┌┬┐┌─┐┌─┐┬─┐┌┬┐┌─┐┌┐┌┌┬┐  ┬  ┬┌─┐┬─┐┬┌─┐┌┐ ┬  ┌─┐┌─┐
 #  ││││├─┘│ │├┬┘ │ ├─┤│││ │   └┐┌┘├─┤├┬┘│├─┤├┴┐│  ├┤ └─┐
 #  ┴┴ ┴┴  └─┘┴└─ ┴ ┴ ┴┘└┘ ┴    └┘ ┴ ┴┴└─┴┴ ┴└─┘┴─┘└─┘└─┘
 
-export RICETHEME=$(<$HOME/.config/bspwm/.rice)
+read -r RICETHEME < "$HOME"/.config/bspwm/.rice
+export RICETHEME
 PATH="$HOME/.config/bspwm/scripts:$PATH"
+rice_dir="$HOME/.config/bspwm/rices/$RICETHEME"
 
 ## Fix java applications
 export _JAVA_AWT_WM_NONREPARENTING=1
-
-#  ┌─┐┬ ┬┌┐┌┌─┐┌┬┐┬┌─┐┌┐┌┌─┐
-#  ├┤ │ │││││   │ ││ ││││└─┐
-#  └  └─┘┘└┘└─┘ ┴ ┴└─┘┘└┘└─┘
-
-function get_values() {
-	DEFNETWORK=$(ip route | grep '^default' | awk '{print $5}' | head -n1)
-	CARD=$(ls -1 /sys/class/backlight/)
-	power_supply_files=$(ls /sys/class/power_supply/)
-
-	for file in $power_supply_files; do
-		if [ -e "/sys/class/power_supply/$file/capacity" ]; then
-			battery_file=$file
-		fi
-
-		if [ -e "/sys/class/power_supply/$file/online" ]; then
-			adapter_file=$file
-		fi
-	done
-
-	BATTERY="$battery_file"
-	ADAPTER="$adapter_file"
-}
-
-set_values() {
-	if [[ "$DEFNETWORK" ]]; then
-		sed -i -e "s/sys_network_interface = .*/sys_network_interface = $DEFNETWORK/g" $HOME/.config/bspwm/scripts/system.ini
-	fi
-	if [[ "$ADAPTER" ]]; then
-		sed -i -e "s/sys_adapter = .*/sys_adapter = $ADAPTER/g" $HOME/.config/bspwm/scripts/system.ini
-	fi
-	if [[ "$BATTERY" ]]; then
-		sed -i -e "s/sys_battery = .*/sys_battery = $BATTERY/g" $HOME/.config/bspwm/scripts/system.ini
-	fi
-	if [[ "$CARD" ]]; then
-		sed -i -e "s/sys_graphics_card = .*/sys_graphics_card = $CARD/g" $HOME/.config/bspwm/scripts/system.ini
-	fi
-}
-
-if [[ ! -f "$SFILE" ]]; then
-	get_values
-	set_values
-	touch $HOME/.config/bspwm/scripts/.sys
-fi
 
 #  ┬ ┬┌─┐┬─┐┬┌─┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐
 #  ││││ │├┬┘├┴┐└─┐├─┘├─┤│  ├┤ └─┐
 #  └┴┘└─┘┴└─┴ ┴└─┘┴  ┴ ┴└─┘└─┘└─┘
 
-workspaces() {
-	name=1
-	for monitor in $(bspc query -M); do
-		bspc monitor "${monitor}" -n "$name" -d '1' '2' '3' '4' '5' '6'
-		#bspc monitor ${monitor} -n "$name" -d '' '' '' '' '' ''
-		((name++))
-	done
-}
+## Set mode of my dual monitors
+xrandr --output DP-4 --auto --output HDMI-0 --auto --left-of DP-4 --rotate left
 
-workspaces
+## Set dual monitors
+bspc monitor DP-4 -d   '' '' '' '' '' 
+bspc monitor HDMI-0 -d ''
 
+## Set Order of my monitors
+bspc wm -O DP-4 HDMI-0
 #  ┌┐ ┌─┐┌─┐┬ ┬┌┬┐  ┌─┐┌─┐┌┐┌┌─┐┬┌─┐
 #  ├┴┐└─┐├─┘││││││  │  │ ││││├┤ ││ ┬
 #  └─┘└─┘┴  └┴┘┴ ┴  └─┘└─┘┘└┘└  ┴└─┘
 
 bspc config external_rules_command $HOME/.config/bspwm/scripts/ExternalRules
 
-bspc config split_ratio 0.52
-bspc config single_monocle true
-bspc config borderless_monocle false
-bspc config gapless_monocle false
+bspc config split_ratio                   0.51
+bspc config single_monocle                true
+bspc config borderless_monocle            false
+bspc config gapless_monocle               false
 
-bspc config focus_follows_pointer true
-bspc config pointer_follows_focus false
-bspc config pointer_motion_interval 5
-bspc config pointer_modifier mod4
-bspc config pointer_action1 move
-bspc config pointer_action2 resize_side
-bspc config pointer_action3 resize_corner
+bspc config focus_follows_pointer         true
+bspc config pointer_follows_focus         false
+bspc config pointer_motion_interval       5
+bspc config pointer_modifier              mod4 
+bspc config pointer_action1               move 
+bspc config pointer_action2               resize_side 
+bspc config pointer_action3               resize_corner
 
-bspc wm --adopt-orphans
+#bspc wm --adopt-orphans
+bspc rule -a scratch sticky=on state=floating focus=on
 
 #  ┬  ┌─┐┬ ┬┌┐┌┌─┐┬ ┬  ┌─┐┌─┐─┐ ┬┬ ┬  ┬─┐┬┌─┐┌─┐┌─┐
 #  │  ├─┤│ │││││  ├─┤  └─┐├┤ ┌┴┬┘└┬┘  ├┬┘││  ├┤ └─┐
 #  ┴─┘┴ ┴└─┘┘└┘└─┘┴ ┴  └─┘└─┘┴ └─ ┴   ┴└─┴└─┘└─┘└─┘
+  
+# Set system vars for polybar
+. SetSysVars
 
 # Terminate already running polybar, eww, picom, sxhkd and dunst instances
 processes=("picom" "polybar" "eww" "sxhkd" "dunst")
 
 for process in "${processes[@]}"; do
-	if pidof -q "$process"; then
-		pkill -x "$process" >/dev/null
-		sleep 0.1
-	fi
+  if pidof -q "$process"; then
+    pkill -9 -x "$process" > /dev/null; sleep 0.1
+  fi
 done
 
-# Launch picom // If you have old hardware or encounter problems
-# uncomment the picom "--legacy-backends" line and comment the current one.
-picom --config "$HOME"/.config/bspwm/rices/"$RICETHEME"/picom.conf &
-#picom --legacy-backends --config "$HOME"/.config/bspwm/rices/"$RICETHEME"/picom.conf &
+## Launch Polybar
+
+launch_bars() {
+		polybar -q mel-bar -c /home/gabreu/.config/bspwm/config.ini &
+		polybar -q mel2-bar -c /home/gabreu/.config/bspwm/config.ini &
+}
+
+launch_bars
 
 # Load colors, dunst, bars and/or eww widgets
-. "$HOME"/.config/bspwm/rices/"$RICETHEME"/Theme.sh
+. ${rice_dir}/Theme.sh
+
+# Launch picom // If you have old hardware or encounter problems 
+# uncomment the picom "--legacy-backends" line and comment the current one.
+picom --config "$HOME"/.config/bspwm/picom.conf &
+#picom --legacy-backends --config "$HOME"/.config/bspwm/picom.conf &
+
+# Launch dunst notification daemon
+dunst -config "$HOME"/.config/bspwm/dunstrc &
 
 # Set random wallpaper for actual rice
-feh -z --no-fehbg --bg-fill "$HOME"/.config/bspwm/rices/"$RICETHEME"/walls/
+feh -z --no-fehbg --bg-fill ${rice_dir}/walls
 
 # Reload sxhkd daemon
 sxhkd -c "$HOME"/.config/bspwm/sxhkdrc &
 
 # Launch polkit
-pgrep -x polkit-gnome-au >/dev/null || /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+pidof -q polkit-gnome-authentication-agent-1 || { /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & }
 
 # Fix cursor
 xsetroot -cursor_name left_ptr

@@ -9,8 +9,8 @@
 (defpoll WMS :interval "500ms" `bspc query -D -d focused --names`)
 
 ;; Time vars
-(defpoll TIME :interval "5s" `date +\"%I:%M %p\"`)
-(defpoll DATE :interval "5s" `date +\"%A, %B %d\"`)
+(defpoll TIME :interval "5s" `date +\"%H:%M %p\"`)
+(defpoll DATE :interval "5s" `date +\"%d de %B - %A\"`)
 
 ;; Music vars
 (defpoll SONG :interval "1s" `MediaControl title`)
@@ -33,7 +33,7 @@
 (defpoll NETSTAT :interval "10s" `scripts/check-network --stat`)
 
 ;; User
-(defvar IMAGE "../../../assets/profile.png")
+(defvar IMAGE "/home/gabreu/Downloads/Demxn on.jpg")
 (defpoll USER :interval "10m" `whoami`)
 
 ;; ** Widgets *************************************************************************
@@ -61,14 +61,14 @@
 (defwidget weather [] 
 		(box :class "dockbox"
 			(box :class "clockbox" :orientation "v" :spacing 0 :valign "center" :halign "start" :space-evenly "false" :vexpand "false" :hexpand "false"
-				(label :class "time" :halign "start" :wrap "true" :limit-width 25 :text TIME)
+				(label :class "time" :halign "middl" :wrap "true" :limit-width 25 :text TIME)
 				(label :class "date" :halign "start" :wrap "true" :limit-width 25 :text DATE))))
 
 ;; music
 (defwidget music [] 
 		(box :class "dockbox"
 			(box :orientation "h" :spacing 0 :valign "center" :halign "start" :space-evenly "false" :vexpand "false" :hexpand "false"
-				(box :class "album_art" :vexpand "false" :hexpand "false" :style "background-image: url('${COVER}');")
+				(box :class "album_art" :vexpand "false" :hexpand "false" :style "background-image: url('/home/gabreu/Downloads/jpg');")
 				(box :class "musicbox" :orientation "v" :spacing 0 :valign "center" :halign "start" :space-evenly "false" :vexpand "false" :hexpand "false"
 					(label :class "song" :halign "start" :wrap "false" :limit-width 18 :text SONG)
 					(label :class "artist" :halign "start" :wrap "false" :limit-width 18 :text ARTIST))
@@ -115,7 +115,7 @@
                                :height "45px"
                                :anchor "top left")
            :stacking "fg"
-           :reserve (struts :distance "80px" :side "top")
+           :reserve (struts :distance "5px" :side "top")
            :windowtype "dock"
            :wm-ignore false
            
@@ -131,7 +131,7 @@
                                :height "45px"
                                :anchor "top left")
            :stacking "fg"
-           :reserve (struts :distance "80px" :side "top")                                                                 
+           :reserve (struts :distance "5px" :side "top")                                                                 
            :windowtype "dock"
            :wm-ignore false
 (apps))
@@ -145,7 +145,7 @@
                                :height "45px"
                                :anchor "top left")
            :stacking "fg"
-           :reserve (struts :distance "80px" :side "top")
+           :reserve (struts :distance "5px" :side "top")
            :windowtype "dock"
            :wm-ignore false
 (weather))
@@ -153,13 +153,13 @@
 ;; music
 (defwindow music
            :monitor 0
-           :geometry (geometry :x "470px"
+           :geometry (geometry :x "480px"
                                :y "15px"
                                :width "460px"
                                :height "45px"
                                :anchor "top left")
            :stacking "fg"
-           :reserve (struts :distance "80px" :side "top")
+           :reserve (struts :distance "5px" :side "top")
            :windowtype "dock"
            :wm-ignore false
 (music))
@@ -173,7 +173,7 @@
                                :height "45px"
                                :anchor "top left")
            :stacking "fg"
-           :reserve (struts :distance "80px" :side "top")
+           :reserve (struts :distance "5px" :side "top")
            :windowtype "dock"
            :wm-ignore false
 (system))

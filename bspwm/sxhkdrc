@@ -3,10 +3,17 @@
 #  ╚═╝╩ ╚═╩ ╩╩ ╩═╩╝╩╚═╚═╝  - z0mbi3.zk@protonmail.com
 #			z0mbi3 config..
 
+# Show keybindings help
+alt + F1
+	KeybindingsHelp
+
+alt + 1
+  /home/gabreu/.config/bspwm/rices/andrea/arin/sidedar/toggle_sidebar
+	
 # Open Terminal (alacritty)
 super + Return
-	/home/gabriel/.local/bin/kitty
-	
+	alacritty
+
 # Open floating Terminal
 super + alt + Return
 	OpenApps --floating
@@ -19,12 +26,18 @@ super + @space
 alt + @space
 	RiceSelector
 
+
+## Nemo
+super + e
+ nemo
+# Scratchpad
+super + alt + o
+	tdrop -a -w 70% -h 35% -y 0 -x 15%  --class scratch alacritty --class=scratch
+
 # Power off, Reboot, Log out, Lockscreen, kill an app
 ctrl + super + alt + {p,r,q,l,k}
-	{systemctl poweroff, systemctl reboot,bspc quit,betterlockscreen -l dim,xkill}
+	{systemctl poweroff, systemctl reboot,bspc quit,physlock -d,xkill}
 
-super + l
-    betterlockscreen -l dim
 # Apps
 shift + alt + {b,g,n,p,r,t,w,m,v,k}
 	{firefox, \
@@ -47,8 +60,8 @@ ctrl + alt {plus,minus,t}
 	{picom-trans -c -o +3, picom-trans -c -o -1, picom-trans -c -d}
 
 # Screenshot Now
-Print
-	org.flameshot.Flameshot gui
+@super + p
+	flameshot gui
 
 # Screenshot Select
 ctrl + Print
@@ -197,3 +210,12 @@ XF86Audio{RaiseVolume,LowerVolume,Mute}
 # Music Control
 XF86Audio{Next,Prev,Play,Stop}
 	MediaControl {--next,--previous,--toggle,--stop}
+
+alt + {j,k}
+	bspc desktop -f {prev,next}.local
+
+alt + {h,l}
+  bspc node -d {prev,next} -f
+
+@super + l
+  betterlockscreen -l
