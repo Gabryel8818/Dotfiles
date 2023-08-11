@@ -5,15 +5,12 @@
 
 # Show keybindings help
 alt + F1
-	KeybindingsHelp
-
-alt + 1
-  /home/gabreu/.config/bspwm/rices/andrea/arin/sidedar/toggle_sidebar
+    KeybindingsHelp
 	
-# Open Terminal (alacritty)
+# Open Terminal (Kitty)
 super + Return
-	alacritty
-
+    /home/gabreu/.local/bin/kitty
+	
 # Open floating Terminal
 super + alt + Return
 	OpenApps --floating
@@ -26,10 +23,6 @@ super + @space
 alt + @space
 	RiceSelector
 
-
-## Nemo
-super + e
- nemo
 # Scratchpad
 super + alt + o
 	tdrop -a -w 70% -h 35% -y 0 -x 15%  --class scratch alacritty --class=scratch
@@ -51,17 +44,21 @@ shift + alt + {b,g,n,p,r,t,w,m,v,k}
 	 OpenApps --nvim, \
 	 OpenApps --music}
 
-# Hide/Show Bar (Polybar and/or eww)
+# open nemo
+super + {e}
+	nemo
+
+# hide/show bar (polybar and/or eww)
 super + {h,u}
-	HideBar {-h,-u}
+	hidebar {-h,-u}
 
 # Change transparency on focused window
-ctrl + alt {plus,minus,t}
+ctrl + alt + {plus,minus,t}
 	{picom-trans -c -o +3, picom-trans -c -o -1, picom-trans -c -d}
 
 # Screenshot Now
-@super + p
-	flameshot gui
+super + p
+    flatpak run org.flameshot.Flameshot gui	
 
 # Screenshot Select
 ctrl + Print
@@ -122,7 +119,7 @@ super + {t,shift + t,s,f}
 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
 # set the node flags
-ctrl + alt {m,x,s,p,i}
+ctrl + alt + {m,x,s,p,i}
 	bspc node -g {marked,locked,sticky,private,hidden}
 
 # Focused desktop window gaps scroll
@@ -196,7 +193,7 @@ super + alt + shift + {h,j,k,l}
 	bspc node -z {right -10 0,top 0 10,bottom 0 -10,left 10 0}
 
 # move a floating window
-alt + shift {Left,Down,Up,Right}
+alt + shift + {Left,Down,Up,Right}
 	bspc node -v {-10 0,0 10,0 -10,10 0}
 
 # Manage brightness
@@ -211,11 +208,6 @@ XF86Audio{RaiseVolume,LowerVolume,Mute}
 XF86Audio{Next,Prev,Play,Stop}
 	MediaControl {--next,--previous,--toggle,--stop}
 
-alt + {j,k}
-	bspc desktop -f {prev,next}.local
-
-alt + {h,l}
-  bspc node -d {prev,next} -f
-
-@super + l
-  betterlockscreen -l
+## Lockscreen
+super + l
+    betterlockscreen -l

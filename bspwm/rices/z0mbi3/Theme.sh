@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-#  ╔═╗╔═╗╔╦╗╔╗ ╦╔═╗  ╦═╗╦╔═╗╔═╗
-#  ╔═╝║ ║║║║╠╩╗║║╣   ╠╦╝║║  ║╣ 	https://github.com/gh0stzk/dotfiles
-#  ╚═╝╚═╝╩ ╩╚═╝╩╚═╝  ╩╚═╩╚═╝╚═╝
-## This file will configure the options
-## and launch the bars corresponding to each theme.
+#  ███████╗ ██████╗ ███╗   ███╗██████╗ ██╗██████╗     ██████╗ ██╗ ██████╗███████╗
+#  ╚══███╔╝██╔═████╗████╗ ████║██╔══██╗██║╚════██╗    ██╔══██╗██║██╔════╝██╔════╝
+#    ███╔╝ ██║██╔██║██╔████╔██║██████╔╝██║ █████╔╝    ██████╔╝██║██║     █████╗  
+#   ███╔╝  ████╔╝██║██║╚██╔╝██║██╔══██╗██║ ╚═══██╗    ██╔══██╗██║██║     ██╔══╝  
+#  ███████╗╚██████╔╝██║ ╚═╝ ██║██████╔╝██║██████╔╝    ██║  ██║██║╚██████╗███████╗
+#  ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚═╝╚═════╝     ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝
+#  Author  :  z0mbi3
+#  Url     :  https://github.com/gh0stzk/dotfiles
+#  About   :  This file will configure and launch the rice.
+#
 
 # Set bspwm configuration for z0mbi3
 set_bspwm_config() {
@@ -29,50 +34,18 @@ set_term_config() {
 		-e "s/family: .*/family: JetBrainsMono Nerd Font/g" \
 		-e "s/size: .*/size: 10/g"
 		
-		cat > "$HOME"/.config/alacritty/colors.yml <<- _EOF_
-				# Colors (Decay, decayce variant) z0mbi3 Rice
-				colors:
-				  primary:
-				    background: '#0d0f18'
-				    foreground: '#a5b6cf'
-
-				  normal:
-				    black:   '#3d414f'
-				    red:     '#dd6777'
-				    green:   '#90ceaa'
-				    yellow:  '#ecd3a0'
-				    blue:    '#86aaec'
-				    magenta: '#c296eb'
-				    cyan:    '#93cee9'
-				    white:   '#cbced3'
-
-				  bright:
-				    black:   '#3d414f'
-				    red:     '#dd6777'
-				    green:   '#90ceaa'
-				    yellow:  '#ecd3a0'
-				    blue:    '#86aaec'
-				    magenta: '#c296eb'
-				    cyan:    '#93cee9'
-				    white:   '#cbced3'
-    
-				  cursor:
-				    cursor: '#a5b6cf'
-				    text:	'#0d0f18'
-_EOF_
+		sed -i "$HOME"/.config/alacritty/rice-colors.yml \
+		-e "s/colors: .*/colors: *z0mbi3_decay/"
 }
 
 # Set compositor configuration
 set_picom_config() {
 		sed -i "$HOME"/.config/bspwm/picom.conf \
+			-e "s/normal = .*/normal =  { fade = true; shadow = true; }/g" \
 			-e "s/shadow-color = .*/shadow-color = \"#000000\"/g" \
 			-e "s/corner-radius = .*/corner-radius = 6/g" \
 			-e "s/\".*:class_g = 'Alacritty'\"/\"100:class_g = 'Alacritty'\"/g" \
-			-e "s/\".*:class_g = 'FloaTerm'\"/\"100:class_g = 'FloaTerm'\"/g" \
-			-e "s/\".*:class_g = 'Updating'\"/\"100:class_g = 'Updating'\"/g" \
-			-e "s/\".*:class_g = 'MusicPlayer'\"/\"100:class_g = 'MusicPlayer'\"/g" \
-			-e "s/\".*:class_g = 'Sysfetch'\"/\"100:class_g = 'Sysfetch'\"/g" \
-			-e "s/\".*:class_g = 'scratch'\"/\"90:class_g = 'scratch'\"/g"
+			-e "s/\".*:class_g = 'FloaTerm'\"/\"100:class_g = 'FloaTerm'\"/g"
 }
 
 # Set dunst notification daemon config
@@ -109,6 +82,7 @@ launch_bars() {
 		eww -c ${rice_dir}/dashboard daemon &
 		polybar -q tray -c ${rice_dir}/bar/polybar_tray.ini &
 }
+
 
 
 ### ---------- Apply Configurations ---------- ###

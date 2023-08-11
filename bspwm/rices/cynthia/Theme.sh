@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-#  ╔═╗╦ ╦╔╗╔╔╦╗╦ ╦╦╔═╗  ╦═╗╦╔═╗╔═╗
-#  ║  ╚╦╝║║║ ║ ╠═╣║╠═╣  ╠╦╝║║  ║╣ 	https://github.com/gh0stzk/dotfiles
-#  ╚═╝ ╩ ╝╚╝ ╩ ╩ ╩╩╩ ╩  ╩╚═╩╚═╝╚═╝
-## This file will configure the options
-## and launch the bars corresponding to each theme.
+#   ██████╗██╗   ██╗███╗   ██╗████████╗██╗  ██╗██╗ █████╗     ██████╗ ██╗ ██████╗███████╗
+#  ██╔════╝╚██╗ ██╔╝████╗  ██║╚══██╔══╝██║  ██║██║██╔══██╗    ██╔══██╗██║██╔════╝██╔════╝
+#  ██║      ╚████╔╝ ██╔██╗ ██║   ██║   ███████║██║███████║    ██████╔╝██║██║     █████╗  
+#  ██║       ╚██╔╝  ██║╚██╗██║   ██║   ██╔══██║██║██╔══██║    ██╔══██╗██║██║     ██╔══╝  
+#  ╚██████╗   ██║   ██║ ╚████║   ██║   ██║  ██║██║██║  ██║    ██║  ██║██║╚██████╗███████╗
+#   ╚═════╝   ╚═╝   ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝
+#  Author  :  z0mbi3
+#  Url     :  https://github.com/gh0stzk/dotfiles
+#  About   :  This file will configure and launch the rice.
+#
 
 # Set bspwm configuration for Cynthia
 set_bspwm_config() {
@@ -25,50 +30,18 @@ set_term_config() {
 		-e "s/family: .*/family: JetBrainsMono Nerd Font/g" \
 		-e "s/size: .*/size: 10/g"
 		
-		cat > "$HOME"/.config/alacritty/colors.yml <<- _EOF_
-				# Colors Cynthia Rice
-				colors:
-				  primary:
-				    background: '#1f2329'
-				    foreground: '#b8bfe5'
-
-				  normal:
-				    black:   '#0f1319'
-				    red:     '#644d66'
-				    green:   '#375759'
-				    yellow:  '#736871'
-				    blue:    '#3f5273'
-				    magenta: '#543f66'
-				    cyan:    '#324f66'
-				    white:   '#b3b3b3'
-
-				  bright:
-				    black:   '#b3b3b3'
-				    red:     '#735771'
-				    green:   '#3f6566'
-				    yellow:  '#807476'
-				    blue:    '#465b80'
-				    magenta: '#533969'
-				    cyan:    '#385a73'
-				    white:   '#e5e5e5'
-    
-				  cursor:
-				    cursor: '#465b80'
-				    text:	'#e5e5e5'
-_EOF_
+		sed -i "$HOME"/.config/alacritty/rice-colors.yml \
+		-e "s/colors: .*/colors: *cynthia_color_scheme/"
 }
 
 # Set compositor configuration
 set_picom_config() {
 		sed -i "$HOME"/.config/bspwm/picom.conf \
+			-e "s/normal = .*/normal =  { fade = true; shadow = true; }/g" \
 			-e "s/shadow-color = .*/shadow-color = \"#000000\"/g" \
 			-e "s/corner-radius = .*/corner-radius = 6/g" \
 			-e "s/\".*:class_g = 'Alacritty'\"/\"98:class_g = 'Alacritty'\"/g" \
-			-e "s/\".*:class_g = 'FloaTerm'\"/\"98:class_g = 'FloaTerm'\"/g" \
-			-e "s/\".*:class_g = 'Updating'\"/\"98:class_g = 'Updating'\"/g" \
-			-e "s/\".*:class_g = 'MusicPlayer'\"/\"98:class_g = 'MusicPlayer'\"/g" \
-			-e "s/\".*:class_g = 'Sysfetch'\"/\"98:class_g = 'Sysfetch'\"/g" \
-			-e "s/\".*:class_g = 'scratch'\"/\"90:class_g = 'scratch'\"/g"
+			-e "s/\".*:class_g = 'FloaTerm'\"/\"98:class_g = 'FloaTerm'\"/g"
 }
 
 # Set dunst notification daemon config
@@ -104,6 +77,7 @@ launch_bars() {
 		polybar -q cyn-bar -c ${rice_dir}/config.ini &
 		polybar -q cyn-bar2 -c ${rice_dir}/config.ini &
 }
+
 
 
 ### ---------- Apply Configurations ---------- ###

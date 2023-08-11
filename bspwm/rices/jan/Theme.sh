@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-#   ╦╔═╗╔╗╔  ╦═╗╦╔═╗╔═╗
-#   ║╠═╣║║║  ╠╦╝║║  ║╣ 	https://github.com/gh0stzk/dotfiles
-#  ╚╝╩ ╩╝╚╝  ╩╚═╩╚═╝╚═╝
-## This file will configure the options
-## and launch the bars corresponding to each theme.
+#       ██╗ █████╗ ███╗   ██╗    ██████╗ ██╗ ██████╗███████╗
+#       ██║██╔══██╗████╗  ██║    ██╔══██╗██║██╔════╝██╔════╝
+#       ██║███████║██╔██╗ ██║    ██████╔╝██║██║     █████╗  
+#  ██   ██║██╔══██║██║╚██╗██║    ██╔══██╗██║██║     ██╔══╝  
+#  ╚█████╔╝██║  ██║██║ ╚████║    ██║  ██║██║╚██████╗███████╗
+#   ╚════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝    ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝
+#  Author  :  z0mbi3
+#  Url     :  https://github.com/gh0stzk/dotfiles
+#  About   :  This file will configure and launch the rice.
+#
 
 # Set bspwm configuration for Jan
 set_bspwm_config() {
@@ -25,50 +30,18 @@ set_term_config() {
 		-e "s/family: .*/family: JetBrainsMono Nerd Font/g" \
 		-e "s/size: .*/size: 10/g"
 		
-		cat > "$HOME"/.config/alacritty/colors.yml <<- _EOF_
-				# Colors (CyberPunk) Jan Rice
-				colors:
-				  primary:
-				    background: '#070219'
-				    foreground: '#c0caf5'
-
-				  normal:
-				    black:   '#626483'
-				    red:     '#fb007a'
-				    green:   '#a6e22e'
-				    yellow:  '#f3e430'
-				    blue:    '#58AFC2'
-				    magenta: '#583794'
-				    cyan:    '#926BCA'
-				    white:   '#d9d9d9'
-
-				  bright:
-				    black:   '#626483'
-				    red:     '#fb007a'
-				    green:   '#a6e22e'
-				    yellow:  '#f3e430'
-				    blue:    '#58AFC2'
-				    magenta: '#472575'
-				    cyan:    '#926BCA'
-				    white:   '#f1f1f1'
-   
-				  cursor:
-				    cursor: '#fb007a'
-				    text:	'#070219'
-_EOF_
+		sed -i "$HOME"/.config/alacritty/rice-colors.yml \
+		-e "s/colors: .*/colors: *jan_cyberpunk/"
 }
 
 # Set compositor configuration
 set_picom_config() {
 		sed -i "$HOME"/.config/bspwm/picom.conf \
+			-e "s/normal = .*/normal =  { fade = true; shadow = false; }/g" \
 			-e "s/shadow-color = .*/shadow-color = \"#000000\"/g" \
 			-e "s/corner-radius = .*/corner-radius = 0/g" \
 			-e "s/\".*:class_g = 'Alacritty'\"/\"96:class_g = 'Alacritty'\"/g" \
-			-e "s/\".*:class_g = 'FloaTerm'\"/\"96:class_g = 'FloaTerm'\"/g" \
-			-e "s/\".*:class_g = 'Updating'\"/\"96:class_g = 'Updating'\"/g" \
-			-e "s/\".*:class_g = 'MusicPlayer'\"/\"96:class_g = 'MusicPlayer'\"/g" \
-			-e "s/\".*:class_g = 'Sysfetch'\"/\"96:class_g = 'Sysfetch'\"/g" \
-			-e "s/\".*:class_g = 'scratch'\"/\"90:class_g = 'scratch'\"/g"
+			-e "s/\".*:class_g = 'FloaTerm'\"/\"96:class_g = 'FloaTerm'\"/g"
 }
 
 # Set dunst notification daemon config
@@ -103,6 +76,7 @@ _EOF_
 launch_bars() {
 		polybar -q main -c ${rice_dir}/config.ini &
 }
+
 
 
 ### ---------- Apply Configurations ---------- ###

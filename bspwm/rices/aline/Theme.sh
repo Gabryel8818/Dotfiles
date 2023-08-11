@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-#  ╔═╗╦  ╦╔╗╔╔═╗  ╦═╗╦╔═╗╔═╗
-#  ╠═╣║  ║║║║║╣   ╠╦╝║║  ║╣ 	https://github.com/gh0stzk/dotfiles
-#  ╩ ╩╩═╝╩╝╚╝╚═╝  ╩╚═╩╚═╝╚═╝
-## This file will configure the options
-## and launch the bars corresponding to each theme.
+#   █████╗ ██╗     ██╗███╗   ██╗███████╗    ██████╗ ██╗ ██████╗███████╗
+#  ██╔══██╗██║     ██║████╗  ██║██╔════╝    ██╔══██╗██║██╔════╝██╔════╝
+#  ███████║██║     ██║██╔██╗ ██║█████╗      ██████╔╝██║██║     █████╗  
+#  ██╔══██║██║     ██║██║╚██╗██║██╔══╝      ██╔══██╗██║██║     ██╔══╝  
+#  ██║  ██║███████╗██║██║ ╚████║███████╗    ██║  ██║██║╚██████╗███████╗
+#  ╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝    ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝                                                               
+#  Author  :  z0mbi3
+#  Url     :  https://github.com/gh0stzk/dotfiles
+#  About   :  This file will configure and launch the rice.
+#
 
 # Set bspwm configuration for Aline
 set_bspwm_config() {
@@ -25,50 +30,18 @@ set_term_config() {
 		-e "s/family: .*/family: JetBrainsMono Nerd Font/g" \
 		-e "s/size: .*/size: 10/g"
 		
-		cat > "$HOME"/.config/alacritty/colors.yml <<- _EOF_
-				# Colors (Pencil light) Aline Rice
-				colors:
-				  primary:
-				    background: '#e5eafe'
-				    foreground: '#51576d'
-
-				  normal:
-				    black:   '#212121'
-				    red:     '#c30771'
-				    green:   '#10a778'
-				    yellow:  '#a89c14'
-				    blue:    '#008ec4'
-				    magenta: '#523c79'
-				    cyan:    '#20a5ba'
-				    white:   '#51576d'
-
-				  bright:
-				    black:   '#212121'
-				    red:     '#fb007a'
-				    green:   '#5fd7af'
-				    yellow:  '#f3e430'
-				    blue:    '#20bbfc'
-				    magenta: '#6855de'
-				    cyan:    '#4fb8cc'
-				    white:   '#51576d'
-
-				  cursor:
-				    cursor: '#20bbfc'
-				    text:	'#e5eafe'
-_EOF_
+		sed -i "$HOME"/.config/alacritty/rice-colors.yml \
+		-e "s/colors: .*/colors: *aline_pencil_light/"
 }
 
 # Set compositor configuration
 set_picom_config() {
 		sed -i "$HOME"/.config/bspwm/picom.conf \
+			-e "s/normal = .*/normal =  { fade = true; shadow = true; }/g" \
 			-e "s/shadow-color = .*/shadow-color = \"#000000\"/g" \
 			-e "s/corner-radius = .*/corner-radius = 6/g" \
 			-e "s/\".*:class_g = 'Alacritty'\"/\"95:class_g = 'Alacritty'\"/g" \
-			-e "s/\".*:class_g = 'FloaTerm'\"/\"95:class_g = 'FloaTerm'\"/g" \
-			-e "s/\".*:class_g = 'Updating'\"/\"95:class_g = 'Updating'\"/g" \
-			-e "s/\".*:class_g = 'MusicPlayer'\"/\"100:class_g = 'MusicPlayer'\"/g" \
-			-e "s/\".*:class_g = 'Sysfetch'\"/\"95:class_g = 'Sysfetch'\"/g" \
-			-e "s/\".*:class_g = 'scratch'\"/\"90:class_g = 'scratch'\"/g"
+			-e "s/\".*:class_g = 'FloaTerm'\"/\"95:class_g = 'FloaTerm'\"/g"
 }
 
 # Set dunst notification daemon config
@@ -103,6 +76,7 @@ _EOF_
 launch_bars() {
 		polybar -q aline-bar -c ${rice_dir}/config.ini &
 }
+
 
 
 ### ---------- Apply Configurations ---------- ###

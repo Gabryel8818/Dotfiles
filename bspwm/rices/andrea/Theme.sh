@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-#  ╔═╗╔╗╔╔╦╗╦═╗╔═╗╔═╗  ╦═╗╦╔═╗╔═╗
-#  ╠═╣║║║ ║║╠╦╝║╣ ╠═╣  ╠╦╝║║  ║╣ 	https://github.com/gh0stzk/dotfiles
-#  ╩ ╩╝╚╝═╩╝╩╚═╚═╝╩ ╩  ╩╚═╩╚═╝╚═╝
-## This file will configure the options
-## and launch the bars corresponding to each theme.
+#   █████╗ ███╗   ██╗██████╗ ██████╗ ███████╗ █████╗     ██████╗ ██╗ ██████╗███████╗
+#  ██╔══██╗████╗  ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗    ██╔══██╗██║██╔════╝██╔════╝
+#  ███████║██╔██╗ ██║██║  ██║██████╔╝█████╗  ███████║    ██████╔╝██║██║     █████╗  
+#  ██╔══██║██║╚██╗██║██║  ██║██╔══██╗██╔══╝  ██╔══██║    ██╔══██╗██║██║     ██╔══╝  
+#  ██║  ██║██║ ╚████║██████╔╝██║  ██║███████╗██║  ██║    ██║  ██║██║╚██████╗███████╗
+#  ╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝ ╚═════╝╚══════╝
+#  Author  :  z0mbi3
+#  Url     :  https://github.com/gh0stzk/dotfiles
+#  About   :  This file will configure and launch the rice.
+#
 
 # Set bspwm configuration for Andrea
 set_bspwm_config() {
@@ -25,50 +30,18 @@ set_term_config() {
 		-e "s/family: .*/family: JetBrainsMono Nerd Font/g" \
 		-e "s/size: .*/size: 10/g"
 		
-		cat > "$HOME"/.config/alacritty/colors.yml <<- _EOF_
-				# Colors (i dont know) Andrea Rice
-				colors:
-				  primary:
-				    background: '#F5EEE6'
-				    foreground: '#6d6a78'
-
-				  normal:
-				    black:   '#80859d'
-				    red:     '#c04364'
-				    green:   '#abd77a'
-				    yellow:  '#ffcc57'
-				    blue:    '#67d4f1'
-				    magenta: '#7a7498'
-				    cyan:    '#9bf4d5'
-				    white:   '#b0b0b0'
-
-				  bright:
-				    black:   '#80859d'
-				    red:     '#c03f61'
-				    green:   '#a1d16c'
-				    yellow:  '#f2be47'
-				    blue:    '#50bfdc'
-				    magenta: '#605692'
-				    cyan:    '#83edc8'
-				    white:   '#b0b0b0'
-    
-				  cursor:
-				    cursor: '#7a7498'
-				    text:	'#F5EEE6'
-_EOF_
+		sed -i "$HOME"/.config/alacritty/rice-colors.yml \
+		-e "s/colors: .*/colors: *andrea_color_scheme/"
 }
 
 # Set compositor configuration
 set_picom_config() {
 		sed -i "$HOME"/.config/bspwm/picom.conf \
+			-e "s/normal = .*/normal =  { fade = true; shadow = true; }/g" \
 			-e "s/shadow-color = .*/shadow-color = \"#000000\"/g" \
 			-e "s/corner-radius = .*/corner-radius = 6/g" \
 			-e "s/\".*:class_g = 'Alacritty'\"/\"96:class_g = 'Alacritty'\"/g" \
-			-e "s/\".*:class_g = 'FloaTerm'\"/\"96:class_g = 'FloaTerm'\"/g" \
-			-e "s/\".*:class_g = 'Updating'\"/\"96:class_g = 'Updating'\"/g" \
-			-e "s/\".*:class_g = 'MusicPlayer'\"/\"96:class_g = 'MusicPlayer'\"/g" \
-			-e "s/\".*:class_g = 'Sysfetch'\"/\"96:class_g = 'Sysfetch'\"/g" \
-			-e "s/\".*:class_g = 'scratch'\"/\"90:class_g = 'scratch'\"/g"
+			-e "s/\".*:class_g = 'FloaTerm'\"/\"96:class_g = 'FloaTerm'\"/g"
 }
 
 # Set dunst notification daemon config
@@ -102,7 +75,6 @@ _EOF_
 # Launch the bar
 launch_bars() {
 		eww -c ${rice_dir}/arin open-many search apps weather music system &
-    polybar -q tray -c ${rice_dir}/polybar_tray.ini &
 }
 
 

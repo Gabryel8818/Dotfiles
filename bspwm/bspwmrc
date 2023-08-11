@@ -20,15 +20,17 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 #  ││││ │├┬┘├┴┐└─┐├─┘├─┤│  ├┤ └─┐
 #  └┴┘└─┘┴└─┴ ┴└─┘┴  ┴ ┴└─┘└─┘└─┘
 
-## Set mode of my dual monitors
-xrandr --output DP-4 --auto --output HDMI-0 --auto --left-of DP-4 --rotate left
+workspaces() {
+	name=1
+	for monitor in $(bspc query -M); do
+		bspc monitor "${monitor}" -n "$name" -d '1' '2' '3' '4' '5' '6'
+		#bspc monitor ${monitor} -n "$name" -d '' '' '' '' '' ''
+		(( name++ ))
+	done
+}
 
-## Set dual monitors
-bspc monitor DP-4 -d   '' '' '' '' '' 
-bspc monitor HDMI-0 -d ''
+workspaces
 
-## Set Order of my monitors
-bspc wm -O DP-4 HDMI-0
 #  ┌┐ ┌─┐┌─┐┬ ┬┌┬┐  ┌─┐┌─┐┌┐┌┌─┐┬┌─┐
 #  ├┴┐└─┐├─┘││││││  │  │ ││││├┤ ││ ┬
 #  └─┘└─┘┴  └┴┘┴ ┴  └─┘└─┘┘└┘└  ┴└─┘
@@ -54,7 +56,7 @@ bspc rule -a scratch sticky=on state=floating focus=on
 #  ┬  ┌─┐┬ ┬┌┐┌┌─┐┬ ┬  ┌─┐┌─┐─┐ ┬┬ ┬  ┬─┐┬┌─┐┌─┐┌─┐
 #  │  ├─┤│ │││││  ├─┤  └─┐├┤ ┌┴┬┘└┬┘  ├┬┘││  ├┤ └─┐
 #  ┴─┘┴ ┴└─┘┘└┘└─┘┴ ┴  └─┘└─┘┴ └─ ┴   ┴└─┴└─┘└─┘└─┘
-  
+
 # Set system vars for polybar
 . SetSysVars
 
@@ -66,15 +68,6 @@ for process in "${processes[@]}"; do
     pkill -9 -x "$process" > /dev/null; sleep 0.1
   fi
 done
-
-## Launch Polybar
-
-launch_bars() {
-		polybar -q mel-bar -c /home/gabreu/.config/bspwm/config.ini &
-		polybar -q mel2-bar -c /home/gabreu/.config/bspwm/config.ini &
-}
-
-launch_bars
 
 # Load colors, dunst, bars and/or eww widgets
 . ${rice_dir}/Theme.sh
