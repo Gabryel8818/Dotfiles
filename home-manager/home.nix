@@ -8,7 +8,6 @@
   home.packages = [
     pkgs.kubectl
     pkgs.kubernetes-helm-wrapped
-    pkgs.zsh
     pkgs.tfswitch
     pkgs.fzf
     pkgs.duf
@@ -40,6 +39,18 @@
     pkgs.lazydocker
     pkgs.trivy
     pkgs.git
+    pkgs.fish
+    pkgs.deadnix
+    pkgs.statix
+    pkgs.awscli2
+    pkgs.httpie
+    pkgs.lazydocker
+    pkgs.navi
+    pkgs.terraformer
+    pkgs.siege
+    pkgs.infracost
+    pkgs.conftest
+    pkgs.k6
   ];
 
   programs.git = {
