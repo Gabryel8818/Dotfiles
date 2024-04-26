@@ -107,7 +107,7 @@
           "foreground": "p:white",
           "style": "diamond",
           "alias": "ns",
-          "template": " \u2388{{ $ola := split \"/\" .Context}} {{ $ola._1 }} ",
+          "template": " \u2388{{ $cluster := split \"/\" .Context}} {{ $cluster._1 }} ",
           "trailing_diamond": "\ue0b0",
           "type": "kubectl"
         },
