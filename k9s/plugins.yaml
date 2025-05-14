@@ -1,0 +1,251 @@
+plugins:
+  #--- Create debug container for selected pod in current namespace
+  # See https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container
+  debug:
+    shortCut: Shift-D
+    description: Add debug container
+    dangerous: true
+    scopes:
+      - containers
+    command: bash
+    background: false
+    confirm: true
+    args:
+      - -c
+      - "kubectl debug -it --context $CONTEXT -n=$NAMESPACE $POD --target=$NAME --image=docker.io/nicolaka:netshoot -- zsh"
+
+  remove_finalizers:
+    shortCut: Ctrl-F
+    confirm: true
+    dangerous: true
+    scopes:
+      - all
+    description: |
+      Removes all finalizers from selected resource. Be careful when using it,
+      it may leave dangling resources or delete them
+    command: kubectl
+    background: true
+    args:
+      - patch
+      - --context
+      - $CONTEXT
+      - --namespace
+      - $NAMESPACE
+      - $RESOURCE_NAME.$RESOURCE_GROUP
+      - $NAME
+      - -p
+      - '{"metadata":{"finalizers":null}}'
+      - --type
+      - merge
+
+  watch-events:
+    shortCut: Shift-E
+    confirm: false
+    description: Get Events
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - "kubectl events --context $CONTEXT --namespace $NAMESPACE --for $RESOURCE_NAME.$RESOURCE_GROUP/$NAME --watch"
+
+  helm-diff-previous:
+    shortCut: Shift-D
+    confirm: false
+    description: Diff with Previous Revision
+    scopes:
+      - helm
+    command: bash
+    background: false
+    args:
+      - -c
+      - >-
+        LAST_REVISION=$(($COL-REVISION-1));
+        helm diff revision $COL-NAME $COL-REVISION $LAST_REVISION --kube-context $CONTEXT --namespace $NAMESPACE --color | less -RK
+  helm-diff-current:
+    shortCut: Shift-Q
+    confirm: false
+    description: Diff with Current Revision
+    scopes:
+      - history
+    command: bash
+    background: false
+    args:
+      - -c
+      - >-
+        RELEASE_NAME=$(echo $NAME | cut -d':' -f1);
+        LATEST_REVISION=$(helm history -n $NAMESPACE --kube-context $CONTEXT $RELEASE_NAME | grep deployed | cut -d$'\t' -f1 | tr -d ' \t');
+        helm diff revision $RELEASE_NAME $LATEST_REVISION $COL-REVISION --kube-context $CONTEXT --namespace $NAMESPACE --color | less -RK
+
+  # Suspends/Resumes a cronjob
+  toggleCronjob:
+    shortCut: Ctrl-S
+    confirm: true
+    dangerous: true
+    scopes:
+      - cj
+    description: Toggle to suspend or resume a running cronjob
+    command: kubectl
+    background: true
+    args:
+      - patch
+      - cronjobs
+      - $NAME
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
+      - -p
+      - '{"spec" : {"suspend" : $!COL-SUSPEND }}'
+
+  # kubectl-blame by knight42
+  # Annotate each line in the given resource's YAML with information from the managedFields to show who last modified the field.
+  # Source: https://github.com/knight42/kubectl-blame
+  # Install via:
+  #   krew: `kubectl krew install blame`
+  #   go: `go install github.com/knight42/kubectl-blame@latest`
+  blame:
+    shortCut: b
+    confirm: false
+    description: "Blame"
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - "kubectl-blame $RESOURCE_NAME $NAME -n $NAMESPACE --context $CONTEXT | less"
+
+  datadog-node:
+    shortCut: Ctrl-L
+    confirm: false
+    description: Datadog
+    scopes:
+      - nodes
+    background: true
+    command: open
+    args:
+      - https://xxx.datadoghq.com/infrastructure?host='$COL-NAME'-$CONTEXT&tags=host%3A'$COL-NAME'-$CONTEXT
+
+  logs-stern-follow: # Note: only shows the currently selected pod unless a filter is set with /
+    shortCut: Shift-Y
+    confirm: false
+    description: "logs|stern"
+    scopes:
+      - pods
+    command: stern
+    background: false
+    args:
+    - "$FILTER"
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
+    - $KUBECONFIG
+  logs-stern-follow-all: # Follows all the logs from all the pods in this namespace
+    shortCut: Ctrl-Y
+    confirm: false
+    description: "logs|stern all"
+    scopes:
+      - pods
+    command: stern
+    background: false
+    args:
+    - ".*"
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
+    - $KUBECONFIG
+
+  logs-less-stern: # opens the stern logs in less to be searchable (but does not follow). A filter must be active with / to see multiple pods (otherwise only the selected pod is shown)
+    shortCut: Ctrl-L
+    description: "logs|stern|less"
+    scopes:
+    - po
+    command: bash
+    background: false
+    args:
+    - -c
+    - '"$@" | less -R'
+    - dummy-arg
+    - stern
+    - --no-follow
+    - --color
+    - always
+    - "$FILTER"
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
+    - $KUBECONFIG
+  logs-less-stern-all: # opens the stern logs from all the pods in this namespace in less (but does not follow)
+    shortCut: Ctrl-T
+    description: "logs|stern all|less"
+    scopes:
+    - po
+    command: bash
+    background: false
+    args:
+    - -c
+    - '"$@" | less -R'
+    - dummy-arg
+    - stern
+    - --no-follow
+    - --color
+    - always
+    - ".*"
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
+    - $KUBECONFIG
+  logs-jq-less: # parses the logs through jq for readability before sending them to less (does not follow)
+    shortCut: Ctrl-J
+    confirm: false
+    description: "logs|jq|less"
+    scopes:
+      - po
+    command: bash
+    background: false
+    args:
+    - -c
+    - '"$@" | jq --color-output | less -R'
+    - dummy-arg
+    - kubectl
+    - logs
+    - $NAME
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
+    - $KUBECONFIG
+
+  refresh-external-secrets:
+    shortCut: Shift-R
+    confirm: false
+    scopes:
+      - externalsecrets
+    description: Refresh the externalsecret
+    command: bash
+    background: false
+    args:
+      - -c
+      - "kubectl annotate externalsecrets.external-secrets.io -n $NAMESPACE $NAME force-sync=$(date +%s) --overwrite"
+  refresh-push-secrets:
+    shortCut: Shift-R
+    confirm: false
+    scopes:
+      - pushsecrets
+    description: Refresh the pushsecret
+    command: bash
+    background: false
+    args:
+      - -c
+      - "kubectl annotate pushsecrets.external-secrets.io -n $NAMESPACE $NAME force-sync=$(date +%s) --overwrite"
